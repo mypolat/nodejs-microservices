@@ -4,8 +4,8 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.sequelize
       .query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";') // added to give uuid by default
-      .then(() => {
-        queryInterface.createTable("users", {
+      .then(async () => {
+        await queryInterface.createTable("users", {
           id: {
             allowNull: false,
             primaryKey: true,
