@@ -1,31 +1,33 @@
-'use strict';
+"use strict";
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('users', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      id: {
-        type: Sequelize.UUID
-      },
-      name: {
-        type: Sequelize.STRING
-      },
-      email: {
-        type: Sequelize.STRING
-      },
-      phone: {
-        type: Sequelize.STRING
-      },
-      country: {
-        type: Sequelize.STRING
-      }
-    });
+    await queryInterface.sequelize
+      .query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";') // added to give uuid by default
+      .then(() => {
+        queryInterface.createTable("users", {
+          id: {
+            allowNull: false,
+            primaryKey: true,
+            type: Sequelize.UUID,
+            defaultValue: Sequelize.literal("uuid_generate_v4()"),
+          },
+          name: {
+            type: Sequelize.STRING,
+          },
+          email: {
+            type: Sequelize.STRING,
+          },
+          phone: {
+            type: Sequelize.STRING,
+          },
+          country: {
+            type: Sequelize.STRING,
+          },
+        });
+      });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('users');
-  }
+    await queryInterface.dropTable("users");
+  },
 };
