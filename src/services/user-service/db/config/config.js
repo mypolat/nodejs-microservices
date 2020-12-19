@@ -1,4 +1,4 @@
-const asd = require("dotenv").config({ path: __dirname + "/../../.env" });
+require("dotenv").config({ path: __dirname + "/../../.env" });
 const { DB_HOST, DB_DATABASE, DB_USERNAME, DB_PASSWORD } = process.env;
 
 module.exports = {
