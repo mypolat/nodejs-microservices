@@ -3,6 +3,8 @@ const models = require("./db/models");
 const { resolver } = require("graphql-sequelize");
 const { createContext, EXPECTED_OPTIONS_KEY } = require("dataloader-sequelize");
 
+const port = process.env.PORT || 4000;
+
 const typeDefs = gql`
   type Query {
     user(id: ID!): user
@@ -70,6 +72,6 @@ const server = new ApolloServer({
   },
 });
 
-server.listen().then(({ url }) => {
+server.listen(port).then(({ url }) => {
   console.log(`Server ready at ${url}`);
 });
