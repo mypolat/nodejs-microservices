@@ -72,7 +72,7 @@ services:
             NODE_ENV: production
             MQ_HOST: amqp://rabbitmq
         restart: on-failure
-    apigateway-app:
+    app-apigateway:
         build: ./api-gateway
         command: sh -c "npm run start"
         ports: 
@@ -88,7 +88,6 @@ services:
         restart: on-failure
 networks:
     main:
-
 volumes: 
     db-reward-data:
     db-user-data:
