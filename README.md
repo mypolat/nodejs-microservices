@@ -27,3 +27,7 @@ This project is an application that exemplifies the microservice architecture. I
 cd nodejs-microservices/src
 docker-compose up
 ```
+
+* GraphQL Api Gateway -> http://localhost:3000
+* User Service GraphQL -> http://localhost:3001
+* Reward Service GraphQL -> http://localhost:3002
