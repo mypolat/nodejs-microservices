@@ -4,7 +4,7 @@ const { createContext, EXPECTED_OPTIONS_KEY } = require("dataloader-sequelize");
 const models = require("./db/models");
 const { buildFederatedSchema } = require("@apollo/federation");
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3002;
 
 const typeDefs = gql`
   type Query {
