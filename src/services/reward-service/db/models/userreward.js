@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.reward)
+      this.belongsTo(models.reward);
     }
   }
   userReward.init(
@@ -23,5 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+
+  userReward.afterCreate(async (userReward, options) => {
+    console.log("afterCreate fired!", userReward.userId,userReward.rewardId);
+  });
+
   return userReward;
 };

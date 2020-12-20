@@ -3,56 +3,66 @@ const models = require("./db/models");
 const { resolver } = require("graphql-sequelize");
 const { createContext, EXPECTED_OPTIONS_KEY } = require("dataloader-sequelize");
 
+const port = process.env.PORT || 4000;
+
 const typeDefs = gql`
   type Query {
-    user(id: ID!): user
-    users: [user]
+    reward(id: ID!): reward
+    rewards: [reward]
   }
 
-  type user {
+  type reward {
     id: ID!
-    name: String
-    email: String
-    phone: String
-    country: String
-    rewards: [userReward]
+    name: String!
+    amount: Int!
+    expiryDate: String!
+    users: [userReward]
   }
 
   type userReward {
-    id: ID
-    userId: ID
-    rewardId: ID
+    id: ID!
+    userId: ID!
+    rewardId: ID!
   }
 
   type Mutation {
-    createUser(
+    createReward(
       name: String!
-      email: String!
-      phone: String!
-      country: String!
-    ): user!
+      amount: Int!
+      expiryDate: String!
+    ): reward!
+
+    assignRewardToUser(
+      userId: ID!
+      rewardId: ID!
+    ): userReward!
   }
 `;
 
 const resolvers = {
   Query: {
-    user: resolver(models.user),
-    users: resolver(models.user),
+    reward: resolver(models.reward),
+    rewards: resolver(models.reward),
   },
 
-  user: {
-    rewards: resolver(models.user.rewards, {
+  reward: {
+    users: resolver(models.reward.users, {
       before: function (options) {
-        options.include = [models.user];
+        options.include = [models.reward];
         return options;
       },
     }),
   },
 
   Mutation: {
-    async createUser(root, args, context) {
-      const { name, email, phone, country } = args;
-      return models.user.create({ name, email, phone, country });
+    async createReward(root, args, context) {
+      const { name, amount, expiryDate } = args;
+      return models.reward.create({ name, amount, expiryDate });
+    },
+
+    async assignRewardToUser(root, args, context) {
+      const { userId, rewardId } = args;
+      return models.userReward.create({ userId, rewardId });
     },
   },
 };
@@ -70,6 +80,6 @@ const server = new ApolloServer({
   },
 });
 
-server.listen().then(({ url }) => {
+server.listen(port).then(({ url }) => {
   console.log(`Server ready at ${url}`);
 });
