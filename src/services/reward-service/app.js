@@ -63,6 +63,17 @@ const resolvers = {
 
     async assignRewardToUser(root, args, context) {
       const { userId, rewardId } = args;
+
+      const reward = await models.reward.findOne({ where: { id: rewardId } });
+
+      if (!reward) {
+        return new Error('no reward');
+      }
+
+      if (new Date() > new Date(reward.expiryDate)) {
+        return new Error('reward has expired, the process cannot be continued');
+      }
+
       return models.userReward.create({ userId, rewardId });
     },
   },
