@@ -6,8 +6,6 @@ const PORT = process.env.PORT || 3000;
 const USER_SERVICE = process.env.SERVICE_USER_HOST || "http://localhost:3001";
 const REWARD_SERVICE = process.env.SERVICE_REWARD_HOST || "http://localhost:3002";
 
-console.log({ USER_SERVICE, REWARD_SERVICE })
-
 const gateway = new ApolloGateway({
   serviceList: [
     { name: "userService", url: USER_SERVICE },
@@ -19,7 +17,12 @@ const startServer = async () => {
   try {
     const { schema, executor } = await gateway.load();
 
-    const server = new ApolloServer({ schema, executor });
+    const server = new ApolloServer({ 
+      schema, 
+      executor,
+      introspection: true,
+      playground: true 
+    });
 
     server.listen(PORT).then(({ url }) => {
       console.log(`Server ready at ${url}`);
