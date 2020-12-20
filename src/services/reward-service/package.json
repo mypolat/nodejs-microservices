@@ -1,0 +1,27 @@
+{
+  "name": "reward-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "author": "mypolat",
+  "license": "ISC",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon -r dotenv/config app.js"
+  },
+  "dependencies": {
+    "apollo-server": "^2.19.0",
+    "dataloader-sequelize": "^2.3.1",
+    "dotenv": "^8.2.0",
+    "graphql": "^15.4.0",
+    "graphql-relay": "^0.6.0",
+    "graphql-sequelize": "^9.4.0",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6",
+    "sequelize-cli": "^6.2.0"
+  }
+}
