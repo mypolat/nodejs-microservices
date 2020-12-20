@@ -6,7 +6,7 @@ const rabbitmq = require("./mq/rabbitmq");
 const { buildFederatedSchema } = require("@apollo/federation");
 
 const MQ_CHANNEL_NAME = process.env.MQ_CHANNEL_NAME || "default";
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3001;
 
 const typeDefs = gql`
   type Query {

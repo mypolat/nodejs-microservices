@@ -7,7 +7,9 @@
   "license": "ISC",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon -r dotenv/config app.js"
+    "dev": "nodemon app.js",
+    "dbMigrate": "npx sequelize-cli db:migrate",
+    "dbSeed": "npx sequelize-cli db:seed:all"
   },
   "dependencies": {
     "@apollo/federation": "^0.20.7",
