@@ -57,6 +57,11 @@ services:
         environment: 
             NODE_ENV: production
             MQ_HOST: amqp://rabbitmq
+            MQ_CHANNEL_NAME: userRewardPipeline
+            DB_HOST: http://db-user
+            DB_USERNAME: postgres
+            DB_PASSWORD: 123456
+            DB_DATABASE: ms_user
         restart: on-failure
     app-reward:
         build: ./services/reward-service
@@ -71,6 +76,11 @@ services:
         environment: 
             NODE_ENV: production
             MQ_HOST: amqp://rabbitmq
+            MQ_CHANNEL_NAME: userRewardPipeline
+            DB_HOST: http://db-reward
+            DB_USERNAME: postgres
+            DB_PASSWORD: 123456
+            DB_DATABASE: ms_reward
         restart: on-failure
     app-apigateway:
         build: ./api-gateway
