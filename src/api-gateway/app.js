@@ -1,15 +1,10 @@
 const { ApolloServer } = require("apollo-server");
 const { ApolloGateway } = require("@apollo/gateway");
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 
-const USER_SERVICE =
-  process.env.SERVICE_USER_HOST + ":" + process.env.SERVICE_USER_PORT ||
-  "http://localhost:3001";
-
-const REWARD_SERVICE =
-  process.env.SERVICE_REWARD_HOST + ":" + process.env.SERVICE_REWARD_PORT ||
-  "http://localhost:3002";
+const USER_SERVICE = process.env.SERVICE_USER_HOST || "http://localhost:3001";
+const REWARD_SERVICE = process.env.SERVICE_REWARD_HOST || "http://localhost:3002";
 
 const server = new ApolloServer({
   gateway: new ApolloGateway({
