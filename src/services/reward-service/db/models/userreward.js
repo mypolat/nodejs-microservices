@@ -31,7 +31,6 @@ module.exports = (sequelize, DataTypes) => {
   userReward.afterCreate(async (userReward, options) => {
     try {
       console.log("userReward.afterCreate triggered!");
-      console.log(userReward);
 
       const mq = await rabbitmq;
       await mq.sendToQueue(MQ_CHANNEL_NAME, Buffer.from(JSON.stringify(userReward)), {

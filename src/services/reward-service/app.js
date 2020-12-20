@@ -2,6 +2,7 @@ const { gql, ApolloServer } = require("apollo-server");
 const { resolver } = require("graphql-sequelize");
 const { createContext, EXPECTED_OPTIONS_KEY } = require("dataloader-sequelize");
 const models = require("./db/models");
+const { buildFederatedSchema } = require("@apollo/federation");
 
 const PORT = process.env.PORT || 4000;
 
@@ -21,8 +22,8 @@ const typeDefs = gql`
 
   type userReward {
     id: ID!
-    userId: ID!
-    rewardId: ID!
+    userId: ID
+    rewardId: ID
   }
 
   type Mutation {
@@ -70,8 +71,12 @@ const resolvers = {
 resolver.contextToOptions = { [EXPECTED_OPTIONS_KEY]: EXPECTED_OPTIONS_KEY };
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema: buildFederatedSchema([
+    {
+      typeDefs,
+      resolvers
+    }
+  ]),
   context() {
     const dataloaderContext = createContext(models.sequelize);
     return {
