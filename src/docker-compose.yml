@@ -73,7 +73,7 @@ services:
             MQ_HOST: amqp://rabbitmq
         restart: on-failure
     apigateway-app:
-        build: ./src/api-gateway
+        build: ./api-gateway
         command: sh -c "npm run start"
         ports: 
             - "3000:3000"
