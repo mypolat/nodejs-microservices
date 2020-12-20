@@ -1,0 +1,94 @@
+version: "3.8"
+services:
+    rabbitmq:
+        image: rabbitmq
+        container_name: rabbitmq
+        command: rabbitmq-server
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        healthcheck:
+            test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+            interval: 5s
+            timeout: 15s
+            retries: 1
+        networks: 
+            - main
+    db-user:
+        container_name: db-user
+        hostname: db-user
+        image: postgres:latest
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=123456
+            - POSTGRES_DB=ms_user_prod
+        networks:
+            - main
+        expose:
+            - "5432"
+        restart: on-failure
+        volumes:
+            - db-user-data:/var/lib/postgresql/data
+    db-reward:
+        container_name: db-reward
+        hostname: db-reward
+        image: postgres:latest
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=123456
+            - POSTGRES_DB=ms_reward_prod
+        networks:
+            - main
+        expose:
+            - "5432"
+        restart: on-failure
+        volumes:
+            - db-reward-data:/var/lib/postgresql/data
+    app-user:
+        build: ./services/user-service
+        command: sh -c "npm run dbMigrate && npm run dbSeed && npm run start"
+        ports: 
+            - "3001:3001"
+        depends_on:
+            - rabbitmq
+            - db-user
+        networks: 
+            - main
+        environment: 
+            NODE_ENV: production
+            MQ_HOST: amqp://rabbitmq
+        restart: on-failure
+    app-reward:
+        build: ./services/reward-service
+        command: sh -c "npm run dbMigrate && npm run dbSeed && npm run start"
+        ports: 
+            - "3002:3002"
+        depends_on:
+            - rabbitmq
+            - db-reward
+        networks: 
+            - main
+        environment: 
+            NODE_ENV: production
+            MQ_HOST: amqp://rabbitmq
+        restart: on-failure
+    apigateway-app:
+        build: ./src/api-gateway
+        command: sh -c "npm run start"
+        ports: 
+            - "3000:3000"
+        depends_on:
+            - app-user
+            - app-reward
+        networks: 
+            - main
+        environment: 
+            SERVICE_USER_HOST: http://app-user:3001
+            SERVICE_REWARD_HOST: http://app-reward:3002
+        restart: on-failure
+networks:
+    main:
+
+volumes: 
+    db-reward-data:
+    db-user-data:
