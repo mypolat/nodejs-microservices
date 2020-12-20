@@ -77,6 +77,8 @@ const server = new ApolloServer({
       [EXPECTED_OPTIONS_KEY]: dataloaderContext,
     };
   },
+  introspection: true,
+  playground: true,
 });
 
 rabbitmq.then((channel) => {

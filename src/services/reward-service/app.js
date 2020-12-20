@@ -94,6 +94,8 @@ const server = new ApolloServer({
       [EXPECTED_OPTIONS_KEY]: dataloaderContext,
     };
   },
+  introspection: true,
+  playground: true,
 });
 
 server.listen(PORT).then(({ url }) => {
