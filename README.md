@@ -24,7 +24,7 @@ This project is an application that exemplifies the microservice architecture. I
 ## Installation
 
 ```
-// cd nodejs-microservices-master
+// cd nodejs-microservices-master/src
 docker-compose up
 ```
 
