@@ -2,8 +2,10 @@ const { gql, ApolloServer } = require("apollo-server");
 const models = require("./db/models");
 const { resolver } = require("graphql-sequelize");
 const { createContext, EXPECTED_OPTIONS_KEY } = require("dataloader-sequelize");
+const rabbitmq = require("./mq/rabbitmq");
 
-const port = process.env.PORT || 4000;
+const MQ_CHANNEL_NAME = process.env.MQ_CHANNEL_NAME || "default";
+const PORT = process.env.PORT || 4000;
 
 const typeDefs = gql`
   type Query {
@@ -44,7 +46,7 @@ const resolvers = {
 
   user: {
     rewards: resolver(models.user.rewards, {
-      before: function (options) {
+      before: function(options) {
         options.include = [models.user];
         return options;
       },
@@ -72,6 +74,29 @@ const server = new ApolloServer({
   },
 });
 
-server.listen(port).then(({ url }) => {
+rabbitmq.then((channel) => {
+  channel.consume(
+    MQ_CHANNEL_NAME,
+    async function(msg) {
+      try {
+        console.log("user reward taken!");
+
+        const tempUserReward = JSON.parse(msg.content.toString());
+        console.log(tempUserReward);
+
+        await models.userReward.create(tempUserReward);
+
+        channel.ack(msg);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    {
+      noAck: false,
+    }
+  );
+});
+
+server.listen(PORT).then(({ url }) => {
   console.log(`Server ready at ${url}`);
 });
