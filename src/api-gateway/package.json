@@ -1,0 +1,20 @@
+{
+  "name": "api-gateway",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon -r dotenv/config app.js"
+  },
+  "author": "mypolat",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/gateway": "^0.21.4",
+    "apollo-server": "^2.19.0",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
