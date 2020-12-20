@@ -21,7 +21,7 @@ This project is an application that exemplifies the microservice architecture. I
 * Prepared for installation using **Docker**.
 
 
-## Kurulum
+## Installation
 
 ```
 cd nodejs-microservices/src
