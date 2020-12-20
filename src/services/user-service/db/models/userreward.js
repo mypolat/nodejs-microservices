@@ -9,18 +9,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      user.hasMany(models.userReward, {
-        foreignKey: {
-          field: 'userId'
-        },
-        as: 'rewards'
-      })
+      this.belongsTo(models.user)
     }
   }
   userReward.init(
     {
-      userId: DataTypes.UUID,
-      rewardId: DataTypes.UUID,
+      userId: DataTypes.INTEGER,
+      rewardId: DataTypes.INTEGER,
     },
     {
       sequelize,
