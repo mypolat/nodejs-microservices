@@ -12,7 +12,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       rewardId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'rewards',
+          key: 'id'
+        }
       }
     });
   },

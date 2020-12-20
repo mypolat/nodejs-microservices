@@ -1,9 +1,9 @@
 const { gql, ApolloServer } = require("apollo-server");
-const models = require("./db/models");
 const { resolver } = require("graphql-sequelize");
 const { createContext, EXPECTED_OPTIONS_KEY } = require("dataloader-sequelize");
+const models = require("./db/models");
 
-const port = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000;
 
 const typeDefs = gql`
   type Query {
@@ -80,6 +80,6 @@ const server = new ApolloServer({
   },
 });
 
-server.listen(port).then(({ url }) => {
+server.listen(PORT).then(({ url }) => {
   console.log(`Server ready at ${url}`);
 });

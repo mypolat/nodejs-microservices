@@ -1,5 +1,9 @@
 "use strict";
 const { Model } = require("sequelize");
+const rabbitmq = require("./../../mq/rabbitmq");
+
+const MQ_CHANNEL_NAME = process.env.MQ_CHANNEL_NAME || "default";
+
 module.exports = (sequelize, DataTypes) => {
   class userReward extends Model {
     /**
@@ -25,7 +29,18 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   userReward.afterCreate(async (userReward, options) => {
-    console.log("afterCreate fired!", userReward.userId,userReward.rewardId);
+    try {
+      console.log("userReward.afterCreate triggered!");
+      console.log(userReward);
+
+      const mq = await rabbitmq;
+      await mq.sendToQueue(MQ_CHANNEL_NAME, Buffer.from(JSON.stringify(userReward)), {
+        persistent: true
+      });
+
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   return userReward;
