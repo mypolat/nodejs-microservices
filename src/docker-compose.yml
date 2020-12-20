@@ -94,7 +94,6 @@ services:
         networks: 
             - main
         environment: 
-            NODE_ENV: production
             SERVICE_USER_HOST: http://app-user:3001
             SERVICE_REWARD_HOST: http://app-reward:3002
         restart: on-failure
