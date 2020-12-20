@@ -3,6 +3,7 @@ const models = require("./db/models");
 const { resolver } = require("graphql-sequelize");
 const { createContext, EXPECTED_OPTIONS_KEY } = require("dataloader-sequelize");
 const rabbitmq = require("./mq/rabbitmq");
+const { buildFederatedSchema } = require("@apollo/federation");
 
 const MQ_CHANNEL_NAME = process.env.MQ_CHANNEL_NAME || "default";
 const PORT = process.env.PORT || 4000;
@@ -15,15 +16,15 @@ const typeDefs = gql`
 
   type user {
     id: ID!
-    name: String
-    email: String
-    phone: String
-    country: String
+    name: String!
+    email: String!
+    phone: String!
+    country: String!
     rewards: [userReward]
   }
 
   type userReward {
-    id: ID
+    id: ID!
     userId: ID
     rewardId: ID
   }
@@ -64,8 +65,12 @@ const resolvers = {
 resolver.contextToOptions = { [EXPECTED_OPTIONS_KEY]: EXPECTED_OPTIONS_KEY };
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema: buildFederatedSchema([
+    {
+      typeDefs,
+      resolvers
+    }
+  ]),
   context() {
     const dataloaderContext = createContext(models.sequelize);
     return {
